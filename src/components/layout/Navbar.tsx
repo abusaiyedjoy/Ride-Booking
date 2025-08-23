@@ -13,29 +13,36 @@ import {
 } from "@/components/ui/popover";
 import { Link } from "react-router";
 import { ModeToggle } from "./toggleMode";
-import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import {
+  authApi,
+  useLogoutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
 import { useDispatch } from "react-redux";
 
-// Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home", role: 'PUBLIC' },
-  { href: "/about", label: "About", role: 'PUBLIC' }
+  { href: "/", label: "Home", role: "PUBLIC" },
+  { href: "/about", label: "About Us", role: "PUBLIC" },
+  { href: "/features", label: "Features", role: "PUBLIC" },
+  { href: "/contact", label: "Contact", role: "PUBLIC" },
+  { href: "/faq", label: "FAQ", role: "PUBLIC" },
 ];
 
 export default function Navbar() {
-  const {data} = useUserInfoQuery(undefined);
+  const { data } = useUserInfoQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
     await logout(undefined).unwrap();
     dispatch(authApi.util.resetApiState());
-  }
+  };
+
   return (
     <header className="border-b">
-      <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
-        {/* Left side */}
-        <div className="flex items-center gap-2">
+      <div className="container mx-auto px-4 flex h-16 items-center justify-between">
+        {/* Left side (Logo + Mobile Menu Button) */}
+        <div className="flex items-center gap-3">
           {/* Mobile menu trigger */}
           <Popover>
             <PopoverTrigger asChild>
@@ -46,8 +53,8 @@ export default function Navbar() {
               >
                 <svg
                   className="pointer-events-none"
-                  width={16}
-                  height={16}
+                  width={20}
+                  height={20}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -57,27 +64,27 @@ export default function Navbar() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M4 12L20 12"
-                    className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+                    d="M4 12H20"
+                    className="origin-center -translate-y-[6px] transition-all duration-300 group-aria-expanded:rotate-45 group-aria-expanded:translate-y-0"
                   />
                   <path
                     d="M4 12H20"
-                    className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
+                    className="origin-center transition-all duration-300 group-aria-expanded:opacity-0"
                   />
                   <path
                     d="M4 12H20"
-                    className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+                    className="origin-center translate-y-[6px] transition-all duration-300 group-aria-expanded:-rotate-45 group-aria-expanded:translate-y-0"
                   />
                 </svg>
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
+            <PopoverContent align="start" className="w-40 p-2 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
+                <NavigationMenuList className="flex-col items-start gap-1">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
                       <NavigationMenuLink asChild className="py-1.5">
-                        <Link to={link.href}>{link.label} </Link>
+                        <Link to={link.href}>{link.label}</Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -85,41 +92,37 @@ export default function Navbar() {
               </NavigationMenu>
             </PopoverContent>
           </Popover>
-          {/* Main nav */}
-          <div className="flex items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
-              <Logo />
-            </a>
-            {/* Navigation menu */}
-            <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
-                    <NavigationMenuLink
-                      asChild
-                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                    >
-                      <Link to={link.href}>{link.label}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <Logo />
+          </Link>
         </div>
-        {/* Right side */}
+
+        {/* Center nav (only desktop) */}
+        <NavigationMenu className="hidden md:flex flex-1 justify-center">
+          <NavigationMenuList className="gap-6">
+            {navigationLinks.map((link, index) => (
+              <NavigationMenuItem key={index}>
+                <NavigationMenuLink
+                  asChild
+                  className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                >
+                  <Link to={link.href}>{link.label}</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        {/* Right side (mode toggle + auth buttons) */}
         <div className="flex items-center gap-2">
           <ModeToggle />
-          {data?.data?.email && (
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              className="text-sm"
-            >
+          {data?.data?.email ? (
+            <Button onClick={handleLogout} variant="outline" className="text-sm">
               Logout
             </Button>
-          )}
-          {!data?.data?.email && (
+          ) : (
             <Button asChild className="text-sm">
               <Link to="/login">Login</Link>
             </Button>

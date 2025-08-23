@@ -30,7 +30,7 @@ export default function Logo() {
         {/* Dark theme gradient */}
         <linearGradient id="darkGradient" x1="0" y1="0" x2="100%" y2="0">
           <stop offset="20%" stopColor="#96e6a1" />
-          <stop offset="100%" stopColor="#588157" />
+          <stop offset="100%" stopColor="#a3b18a" />
         </linearGradient>
       </defs>
 
