@@ -1,11 +1,15 @@
 import App from "@/App";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import About from "@/pages/About/About";
+import AdminProfilePage from "@/pages/admin/AdminProfile";
 import Login from "@/pages/Authentication/Login";
 import Register from "@/pages/Authentication/Register";
 import Contact from "@/pages/Contact/Contact";
+import DriverProfilePage from "@/pages/driver/Profile";
 import FAQ from "@/pages/FAQ/FAQ";
 import Features from "@/pages/Features/Features";
 import Home from "@/pages/Home/Home";
+import RiderProfilePage from "@/pages/rider/Profile";
 import Verify from "@/pages/Verify/Verify";
 import { createBrowserRouter } from "react-router";
 
@@ -47,5 +51,41 @@ export const router = createBrowserRouter([
   {
     Component: Verify,
     path: "/verify",
+  },
+
+  // Rider Routes
+  {
+    path: "/rider",
+    Component: (props) => <DashboardLayout role="RIDER" {...props} />,
+    children: [
+      {
+        path: "profile",
+        Component: RiderProfilePage,
+      },
+    ],
+  },
+
+  // Driver Routes
+  {
+    path: "/driver",
+    Component: (props) => <DashboardLayout role="DRIVER" {...props} />,
+    children: [
+      {
+        path: "profile",
+        Component: DriverProfilePage,
+      },
+    ],
+  },
+
+  // Admin Routes
+  {
+    path: "/admin",
+    Component: (props) => <DashboardLayout role="SUPER-ADMIN" {...props} />,
+    children: [
+      {
+        path: "profile",
+        Component: AdminProfilePage,
+      },
+    ],
   },
 ]);

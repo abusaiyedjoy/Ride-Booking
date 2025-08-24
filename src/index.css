@@ -1,11 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 
 @custom-variant dark (&:is(.dark *));
-
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -120,7 +118,6 @@
   font-weight: 900; 
   font-style: normal;
 }
-
 
 @layer base {
   * {
