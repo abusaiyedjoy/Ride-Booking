@@ -21,7 +21,7 @@ export const HeroSection = () => {
   const [returnTime, setReturnTime] = useState("04:30 AM");
 
   return (
-    <section className="relative overflow-hidden h-[90vh] my-12 rounded-3xl flex items-center">
+    <section className="relative overflow-hidden lg:h-[90vh] my-12 rounded-3xl flex items-center">
       {/* Background image */}
       <div className="absolute inset-0">
         <img
@@ -35,7 +35,7 @@ export const HeroSection = () => {
       <div className="absolute inset-0 bg-black/50" />
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto flex h-full items-center justify-center px-4">
+      <div className="relative pb-3 z-10 container mx-auto flex h-full items-center justify-center px-4">
         <div className="flex max-w-6xl flex-col items-center text-center gap-8">
           <Logo />
 

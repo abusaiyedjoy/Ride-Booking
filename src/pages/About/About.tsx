@@ -101,9 +101,9 @@ const timeline = [
   },
 ];
 
-export default function AboutUsPage() {
+export default function About() {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 space-y-12">
       {/* Header */}
       <div className="flex flex-col items-start gap-4 rounded-2xl bg-gradient-to-br from-muted/40 to-background p-6 md:p-10">
         <Badge className="w-fit" variant="secondary">
@@ -259,13 +259,6 @@ export default function AboutUsPage() {
         <CardContent>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {team.map((member) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.3 }}
-              >
                 <Card className="h-full rounded-2xl">
                   <CardHeader className="items-center text-center">
                     <Avatar className="h-16 w-16">
@@ -303,7 +296,6 @@ export default function AboutUsPage() {
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
             ))}
           </div>
         </CardContent>

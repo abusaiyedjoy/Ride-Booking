@@ -19,6 +19,15 @@ import {
   useUserInfoQuery,
 } from "@/redux/features/auth/auth.api";
 import { useDispatch } from "react-redux";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { CircleUser } from "lucide-react";
 
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
@@ -118,10 +127,40 @@ export default function Navbar() {
         {/* Right side (mode toggle + auth buttons) */}
         <div className="flex items-center gap-2">
           <ModeToggle />
+
           {data?.data?.email ? (
-            <Button onClick={handleLogout} variant="outline" className="text-sm">
-              Logout
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="rounded-full p-0 w-10 h-10 flex items-center justify-center"
+                >
+                  {data?.data?.picture ? (
+                    <img
+                      src={data.data.picture}
+                      alt="Profile"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-secondary cursor-pointer flex items-center justify-center">
+                      <CircleUser className="w-7 h-7 text-foreground" />
+                    </div>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuLabel>
+                  {data?.data?.name || "My Account"}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Button asChild className="text-sm">
               <Link to="/login">Login</Link>
