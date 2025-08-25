@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Calendar as FullCalendar } from "react-calendar"; 
+import { Link } from "react-router";
 
 export const HeroSection = () => {
   const [roundTrip, setRoundTrip] = useState(true);
@@ -51,10 +52,10 @@ export const HeroSection = () => {
 
           <div className="flex flex-wrap justify-center gap-4">
             <Button className="shadow-sm hover:shadow-lg">
-              Request a ride
+              <Link to="/">Request a ride <CalendarIcon className="h-4 w-4" /></Link>
             </Button>
             <Button variant="outline" className="flex items-center gap-2">
-              Become a driver <CarTaxiFront className="h-4 w-4" />
+              <Link to="/create">As a Driver <CarTaxiFront className="h-4 w-4" /></Link>
             </Button>
           </div>
 

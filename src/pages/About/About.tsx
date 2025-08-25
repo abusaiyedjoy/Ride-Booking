@@ -258,17 +258,17 @@ export default function About() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {team.map((member) => (
-                <Card className="h-full rounded-2xl">
-                  <CardHeader className="items-center text-center">
-                    <Avatar className="h-16 w-16">
+            {team?.map((member) => (
+                <Card className="h-full rounded-2xl text-center">
+                  <CardHeader className="items-center text-center place-content-center">
+                    <Avatar className="h-16 w-16 place-self-center">
                       <AvatarImage src={member.avatar} alt={member.name} />
                       <AvatarFallback>{member.initials}</AvatarFallback>
                     </Avatar>
-                    <CardTitle className="mt-2 text-lg">
+                    <CardTitle className="mt-2 text-lg place-self-center">
                       {member.name}
                     </CardTitle>
-                    <CardDescription className="flex items-center gap-1">
+                    <CardDescription className="flex items-center gap-1 place-self-center">
                       <Briefcase className="h-4 w-4" /> {member.role}
                     </CardDescription>
                   </CardHeader>

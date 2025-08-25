@@ -1,4 +1,5 @@
 import App from "@/App";
+import { RiderDriverForm } from "@/components/AuthenticationForm/RiderDriverForm/RiderDriverForm";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import About from "@/pages/About/About";
 import AdminProfilePage from "@/pages/admin/AdminProfile";
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
   {
     Component: Verify,
     path: "/verify",
+  },
+  {
+    Component: RiderDriverForm,
+    path: "/create",
   },
 
   // Rider Routes
