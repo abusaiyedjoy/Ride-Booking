@@ -2,12 +2,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,115 +16,125 @@ import { cn } from "@/lib/utils";
 import Password from "../../ui/Password";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
-import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import Logo from "@/assets/icons/Logo";
+import { useCreateDriverMutation } from "@/redux/features/driver/driver.api";
+import { useCreateriderMutation } from "@/redux/features/rider/rider.api";
 
 // ✅ Rider Schema
-const riderSchema = z
-  .object({
-    name: z.string().min(3, "Name is too short"),
-    email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z
-      .string()
-      .min(8, { error: "Confirm Password is too short" }),
-    phone: z.string().optional(),
-    address: z.string().optional(),
-    role: z.literal("RIDER"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
-    path: ["confirmPassword"],
-  });
+const riderProfileSchema = z.object({
+  phone: z.string().min(8, "Phone number is required"),
+  picture: z.string().url("Must be a valid URL").optional(),
+  paymentMethod: z.string().min(3, "Payment method is required"),
+  location: z.object({
+    type: z.literal("Point").default("Point"),
+    coordinates: z
+      .tuple([z.number(), z.number()])
+      .refine(
+        ([lng, lat]) => lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90,
+        {
+          message: "Coordinates must be valid longitude and latitude",
+        }
+      ),
+    address: z.string().min(3, "Address is required"),
+  }),
+});
 
-// ✅ Driver Schema
-const driverSchema = z
-  .object({
-    name: z.string().min(3, "Name is too short"),
-    email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z
-      .string()
-      .min(8, { error: "Confirm Password is too short" }),
-    phoneNumber: z.string(),
-    driverLicenseNumber: z.string().min(5, "Driver License is required"),
-    vehicleInfo: z.object({
-      type: z.string(),
-      make: z.string(),
-      model: z.string(),
-      licensePlate: z.string(),
-    }),
-    role: z.literal("DRIVER"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
-    path: ["confirmPassword"],
-  });
+// ✅ Driver Schema (based on backend model)
+const driverSchema = z.object({
+  driverLicenseNumber: z.string().min(3, "License number is required"),
+  vehicleInfo: z.object({
+    type: z.string().min(1, "Vehicle type is required"),
+    make: z.string().min(1, "Make is required"),
+    model: z.string().min(1, "Model is required"),
+    color: z.string().min(1, "Color is required"),
+    modelYear: z
+      .number({ invalid_type_error: "Year must be a number" })
+      .min(1900, "Enter valid year")
+      .max(new Date().getFullYear() + 1, "Year cannot be in future"),
+    licensePlate: z.string().min(2, "License plate is required"),
+  }),
+});
 
 export function RiderDriverForm() {
   const [activeTab, setActiveTab] = useState<"RIDER" | "DRIVER">("RIDER");
-  const [register] = useRegisterMutation();
+  const [createrider] = useCreateriderMutation();
+  const [createDriver] = useCreateDriverMutation();
+  const { data: userInfo } = useUserInfoQuery(undefined);
   const navigate = useNavigate();
 
-  const riderForm = useForm<z.infer<typeof riderSchema>>({
-    resolver: zodResolver(riderSchema),
-    defaultValues: { name: "", email: "", password: "", role: "RIDER" },
-  });
-
-  const driverForm = useForm<z.infer<typeof driverSchema>>({
-    resolver: zodResolver(driverSchema),
+  // Form setup
+  const riderProfileForm = useForm<z.infer<typeof riderProfileSchema>>({
+    resolver: zodResolver(riderProfileSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      role: "DRIVER",
-      vehicleInfo: { type: "", make: "", model: "", licensePlate: "" },
+      phone: "",
+      picture: "",
+      paymentMethod: "",
+      location: { type: "Point", coordinates: [0, 0], address: "" },
     },
   });
 
-  const onSubmitRider = async (data: z.infer<typeof riderSchema>) => {
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      role: data.role,
-    };
-    console.log(userInfo);
+  // Driver form setup
+  const driverForm = useForm<z.infer<typeof driverSchema>>({
+    resolver: zodResolver(driverSchema),
+    defaultValues: {
+      driverLicenseNumber: "",
+      vehicleInfo: {
+        type: "",
+        make: "",
+        model: "",
+        color: "",
+        modelYear: undefined,
+        licensePlate: "",
+      },
+    },
+  });
+
+  // Rider Submit
+  const onSubmitRiderProfile = async (
+    data: z.infer<typeof riderProfileSchema>
+  ) => {
     try {
-      const result = await register(userInfo).unwrap();
+      const result = await createrider({
+        userId: userInfo?.data?._id,
+        phone: data.phone,
+        picture: data.picture,
+        paymentMethod: data.paymentMethod,
+        location: data.location,
+      });
       console.log(result);
-      toast.success("Rider created successfully");
-      navigate("/verify");
-    } catch (error) {
-      console.error(error);
+      toast.success("Rider profile created successfully");
+      navigate("/rider/profile");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to create rider profile");
     }
   };
 
+  // Driver Submit
   const onSubmitDriver = async (data: z.infer<typeof driverSchema>) => {
-    const driverInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      role: data.role,
-      vehicleInfo: {
-        type: data.vehicleInfo.type,
-        make: data.vehicleInfo.make,
-        model: data.vehicleInfo.model,
-        licensePlate: data.vehicleInfo.licensePlate,
-      },
-    };
-    console.log(driverInfo);
+    if (!data) return;
     try {
-      const result = await register(driverInfo).unwrap();
+      const result = await createDriver({
+        userId: userInfo?.data?._id,
+        driverLicenseNumber: data.driverLicenseNumber,
+        vehicleInfo: data.vehicleInfo,
+      }).unwrap();
       console.log(result);
-      toast.success("Driver created successfully");
-      navigate("/verify");
+      toast.success("Driver profile created successfully");
+      navigate("/driver/profile");
     } catch (error) {
-      console.error(error);
+      toast.error("Failed to create driver profile");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex flex-col gap-6 my-3 items-center justify-center px-4">
+      <div className="flex justify-center gap-2 md:justify-start">
+        <Link to="/" className="flex items-center gap-2 font-medium">
+          <Logo />
+        </Link>
+      </div>
+
       <div className="w-full max-w-lg rounded-xl border shadow-md bg-background p-6">
         {/* Tabs */}
         <div className="flex justify-center gap-4 mb-8">
@@ -148,19 +156,19 @@ export function RiderDriverForm() {
 
         {/* Rider Form */}
         {activeTab === "RIDER" && (
-          <Form {...riderForm}>
+          <Form {...riderProfileForm}>
             <form
-              onSubmit={riderForm.handleSubmit(onSubmitRider)}
+              onSubmit={riderProfileForm.handleSubmit(onSubmitRiderProfile)}
               className="space-y-6"
             >
               <FormField
-                control={riderForm.control}
-                name="name"
+                control={riderProfileForm.control}
+                name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Phone</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="John Doe" />
+                      <Input {...field} placeholder="+8801712345678" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -168,16 +176,15 @@ export function RiderDriverForm() {
               />
 
               <FormField
-                control={riderForm.control}
-                name="email"
+                control={riderProfileForm.control}
+                name="picture"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Picture URL</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        type="email"
-                        placeholder="john@example.com"
+                        placeholder="https://example.com/rider.jpg"
                       />
                     </FormControl>
                     <FormMessage />
@@ -186,56 +193,80 @@ export function RiderDriverForm() {
               />
 
               <FormField
-                control={riderForm.control}
-                name="password"
+                control={riderProfileForm.control}
+                name="paymentMethod"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Payment Method</FormLabel>
                     <FormControl>
-                      <Password {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={riderForm.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Password {...field} />
-                    </FormControl>
-                    <FormDescription className="sr-only">
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={riderForm.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="+1234567890" />
+                      <Input {...field} placeholder="Bkash, Nagad, Cash..." />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* Location: Longitude */}
               <FormField
-                control={riderForm.control}
-                name="address"
+                control={riderProfileForm.control}
+                name="location.coordinates"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Longitude</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="any"
+                        value={field.value[0]}
+                        onChange={(e) =>
+                          field.onChange([
+                            parseFloat(e.target.value),
+                            field.value[1],
+                          ])
+                        }
+                        placeholder="91.7832"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Location: Latitude */}
+              <FormField
+                control={riderProfileForm.control}
+                name="location.coordinates"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Latitude</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="any"
+                        value={field.value[1]}
+                        onChange={(e) =>
+                          field.onChange([
+                            field.value[0],
+                            parseFloat(e.target.value),
+                          ])
+                        }
+                        placeholder="22.3569"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Location: Address */}
+              <FormField
+                control={riderProfileForm.control}
+                name="location.address"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Address</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="123 Main St" />
+                      <Input {...field} placeholder="Chattogram, Bangladesh" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -243,7 +274,7 @@ export function RiderDriverForm() {
               />
 
               <Button type="submit" className="w-full">
-                Register as Rider
+                Create Rider Profile
               </Button>
             </form>
           </Form>
@@ -258,71 +289,10 @@ export function RiderDriverForm() {
             >
               <FormField
                 control={driverForm.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Driver Name" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={driverForm.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="email"
-                        placeholder="driver@example.com"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={driverForm.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Password {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={driverForm.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Password {...field} />
-                    </FormControl>
-                    <FormDescription className="sr-only">
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={driverForm.control}
                 name="driverLicenseNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Driver License Number</FormLabel>
+                    <FormLabel>License Number</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="DL12345" />
                     </FormControl>
@@ -334,7 +304,6 @@ export function RiderDriverForm() {
               {/* Vehicle Info */}
               <div className="space-y-2 border p-4 rounded-md">
                 <h3 className="font-semibold text-sm">Vehicle Info</h3>
-
                 <FormField
                   control={driverForm.control}
                   name="vehicleInfo.type"
@@ -342,13 +311,12 @@ export function RiderDriverForm() {
                     <FormItem>
                       <FormLabel>Type</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Car, Bike, etc." />
+                        <Input {...field} placeholder="Car" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={driverForm.control}
                   name="vehicleInfo.make"
@@ -362,7 +330,6 @@ export function RiderDriverForm() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={driverForm.control}
                   name="vehicleInfo.model"
@@ -376,7 +343,40 @@ export function RiderDriverForm() {
                     </FormItem>
                   )}
                 />
-
+                <FormField
+                  control={driverForm.control}
+                  name="vehicleInfo.color"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Color</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="White" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={driverForm.control}
+                  name="vehicleInfo.modelYear"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Year</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          {...field}
+                          value={field.value ?? ""}
+                          onChange={(e) =>
+                            field.onChange(e.target.valueAsNumber)
+                          }
+                          placeholder="2020"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={driverForm.control}
                   name="vehicleInfo.licensePlate"
@@ -384,7 +384,7 @@ export function RiderDriverForm() {
                     <FormItem>
                       <FormLabel>License Plate</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="ABC-1234" />
+                        <Input {...field} placeholder="DHK-1234" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -393,11 +393,12 @@ export function RiderDriverForm() {
               </div>
 
               <Button type="submit" className="w-full">
-                Register as Driver
+                Register Driver
               </Button>
             </form>
           </Form>
         )}
+
         <div className="text-center mt-2 text-sm">
           Already have an account?{" "}
           <Link to="/login" className="underline underline-offset-4">

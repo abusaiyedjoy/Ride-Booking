@@ -33,9 +33,12 @@ export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivE
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const loginInfo = {
+      email: data.email,
+      password: data.password
+    };
     try {
-      const res = await login(data).unwrap();
-      console.log(res);
+      const res = await login(loginInfo).unwrap();
 
       if (res.success) {
         toast.success("Logged in successfully");
@@ -92,7 +95,7 @@ export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivE
             )}
           />
 
-          <Button type="submit" className="w-full">Login</Button>
+          <Button type="submit" className="w-full cursor-pointer">Login</Button>
         </form>
       </Form>
 

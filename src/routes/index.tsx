@@ -10,6 +10,7 @@ import DriverProfilePage from "@/pages/driver/Profile";
 import FAQ from "@/pages/FAQ/FAQ";
 import Features from "@/pages/Features/Features";
 import Home from "@/pages/Home/Home";
+import RideBookingPage from "@/pages/rideBook/RideBooking";
 import RiderProfilePage from "@/pages/rider/Profile";
 import Verify from "@/pages/Verify/Verify";
 import { createBrowserRouter } from "react-router";
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       {
         Component: About,
         path: "about",
+      },
+      {
+        path: "rides",
+        Component: RideBookingPage,
       },
       {
         Component: Features,
@@ -57,6 +62,7 @@ export const router = createBrowserRouter([
     Component: RiderDriverForm,
     path: "/create",
   },
+  
 
   // Rider Routes
   {
@@ -67,6 +73,7 @@ export const router = createBrowserRouter([
         path: "profile",
         Component: RiderProfilePage,
       },
+      
     ],
   },
 

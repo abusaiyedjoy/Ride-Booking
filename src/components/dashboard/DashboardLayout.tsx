@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import {useNavigate} from "react-router-dom"
 import {
   Sidebar,
   SidebarContent,
@@ -30,9 +31,15 @@ import {
   Activity,
   TrendingUp,
 } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Outlet } from "react-router";
+import { useDispatch } from 'react-redux';
+import { useLogoutMutation } from '@/redux/features/auth/auth.api';
+import { authApi } from './../../redux/features/auth/auth.api';
+import { toast } from 'sonner';
+import  Logo  from '@/assets/icons/Logo';
 
 export default function DashboardLayout({
   role,
@@ -41,6 +48,16 @@ export default function DashboardLayout({
   children?: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [logout] = useLogoutMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await logout(undefined).unwrap();
+    dispatch(authApi.util.resetApiState());
+    toast.error("Logout successfully")
+    navigate('/')
+  };
 
   // Role-based menu items
   const getMenuItems = () => {
@@ -188,13 +205,13 @@ export default function DashboardLayout({
   const getRoleHeaderClasses = () => {
     switch (role) {
       case "RIDER":
-        return "bg-blue-600 dark:bg-blue-700";
+        return "bg-sidebar-primary";
       case "DRIVER":
-        return "bg-green-600 dark:bg-green-700";
+        return "bg-sidebar-primary";
       case "SUPER-ADMIN":
-        return "bg-red-600 dark:bg-red-700";
+        return "bg-sidebar-primary";
       default:
-        return "bg-gray-600 dark:bg-gray-700";
+        return "bg-chart-4";
     }
   };
 
@@ -232,12 +249,11 @@ export default function DashboardLayout({
           <SidebarContent>
             {/* Header */}
             <div className={`p-4 ${getRoleHeaderClasses()} text-white`}>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                  <Car className="w-5 h-5" />
-                </div>
+              <div className="flex flex-col items-start">
+                <Link to="/">
+                <Logo/>
+                </Link>
                 <div>
-                  <h2 className="font-bold text-lg">RideApp</h2>
                   <Badge
                     variant="secondary"
                     className="text-xs bg-white bg-opacity-20 text-white border-white border-opacity-30"
@@ -414,8 +430,9 @@ export default function DashboardLayout({
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Button
-                    variant="ghost"
-                    className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
+                    variant="button"
+                    onClick={handleLogout}
+                    className="w-full justify-start cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
                   >
                     <LogOut className="w-4 h-4" />
                     Logout
