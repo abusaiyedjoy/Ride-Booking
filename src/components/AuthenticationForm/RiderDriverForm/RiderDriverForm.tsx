@@ -13,13 +13,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import Password from "../../ui/Password";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import Logo from "@/assets/icons/Logo";
 import { useCreateDriverMutation } from "@/redux/features/driver/driver.api";
-import { useCreateriderMutation } from "@/redux/features/rider/rider.api";
+import { useCreateRiderMutation } from '@/redux/features/rider/rider.api';
 
 // ✅ Rider Schema
 const riderProfileSchema = z.object({
@@ -58,7 +57,7 @@ const driverSchema = z.object({
 
 export function RiderDriverForm() {
   const [activeTab, setActiveTab] = useState<"RIDER" | "DRIVER">("RIDER");
-  const [createrider] = useCreateriderMutation();
+  const [createrider] = useCreateRiderMutation();
   const [createDriver] = useCreateDriverMutation();
   const { data: userInfo } = useUserInfoQuery(undefined);
   const navigate = useNavigate();
@@ -128,7 +127,7 @@ export function RiderDriverForm() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col gap-6 my-3 items-center justify-center px-4">
+    <div className="min-h-screen w-full flex flex-col gap-6 my-3 items-center justify-center px-4">
       <div className="flex justify-center gap-2 md:justify-start">
         <Link to="/" className="flex items-center gap-2 font-medium">
           <Logo />

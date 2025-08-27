@@ -14,6 +14,7 @@ import RideBookingPage from "@/pages/rideBook/RideBooking";
 import RiderProfilePage from "@/pages/rider/Profile";
 import Verify from "@/pages/Verify/Verify";
 import { createBrowserRouter } from "react-router";
+import RideRequestForm from './../pages/rideBook/RideBookinForm';
 
 export const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
   {
     Component: RiderDriverForm,
     path: "/create",
+  },
+  {
+    Component: RideRequestForm,
+    path: "/ride-request",
   },
   
 

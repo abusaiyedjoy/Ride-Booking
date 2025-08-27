@@ -7,9 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "react-router";
 import DatePickerField from "./../../ui/datePicker";
+import { toast } from "sonner";
 export const HeroSection = () => {
   const [roundTrip, setRoundTrip] = useState(true);
   const [filter, setFilter] = useState<"with" | "without">("without");
+
+  const handleSearch =  ()=>{
+    toast.warning("This feature is not available yet");
+  }
 
   return (
     <section className="relative overflow-hidden lg:h-[90vh] my-12 rounded-3xl flex items-center">
@@ -44,7 +49,7 @@ export const HeroSection = () => {
             <Button className="shadow-sm hover:shadow-lg ">
               <Link
                 className="inline-flex flex-row-reverse items-center gap-2"
-                to="/"
+                to="/ride-request"
               >
                 Request a ride <CalendarIcon className="h-5 w-5" />
               </Link>
@@ -136,7 +141,7 @@ export const HeroSection = () => {
                     With Driver
                   </Button>
                 </div>
-                <Button size="lg" className="bg-chart-2 cursor-pointer mt-2 md:mt-0 md:ml-4">
+                <Button onClick={handleSearch} size="lg" className="bg-chart-2 cursor-pointer mt-2 md:mt-0 md:ml-4">
                   Search
                 </Button>
               </div>

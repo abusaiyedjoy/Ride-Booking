@@ -74,10 +74,11 @@ export function RegisterForm({
     try {
       const result = await register(userInfo).unwrap();
       console.log(result);
-      toast.success("User created successfully");
       navigate("/verify");
+      toast.success("User created successfully");
     } catch (error) {
       console.error(error);
+      toast.error( "Failed to create user");
     }
   };
 
@@ -183,7 +184,7 @@ export function RegisterForm({
               )}
             />
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full cursor-pointer">
               Register
             </Button>
           </form>

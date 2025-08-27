@@ -109,7 +109,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
 
   const userRole = data?.data?.role;
-  const userStatus = data?.data?.status || data?.data?.availability; // Handle both status fields
+  const userStatus = data?.data?.status || data?.data?.availability; 
   const userName = data?.data?.name || data?.user?.name;
   
   const navigationLinks = getNavigationLinks(userRole, userStatus);
