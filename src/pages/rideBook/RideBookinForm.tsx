@@ -27,14 +27,17 @@ import { cn } from "@/lib/utils";
 const formSchema = z.object({
   pickupLocation: z.string().min(3, "Pickup location is required"),
   destinationLocation: z.string().min(3, "Destination is required"),
-  requestedAt: z.date({
-    required_error: "Pickup time is required",
-  }),
+  requestedAt: z
+    .string()
+    .nonempty("Pickup time is required")
+    .refine((val) => !isNaN(Date.parse(val)), "Pickup time must be a valid date"),
   fare: z
     .string()
     .optional()
     .refine((val) => !val || !isNaN(Number(val)), "Fare must be a number"),
 });
+
+
 
 export default function RideRequestForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,7 +45,7 @@ export default function RideRequestForm() {
     defaultValues: {
       pickupLocation: "",
       destinationLocation: "",
-      requestedAt: new Date(),
+      requestedAt: "",
       fare: "",
     },
   });
@@ -119,7 +122,6 @@ export default function RideRequestForm() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
                       />

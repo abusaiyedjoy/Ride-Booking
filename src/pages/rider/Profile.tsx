@@ -1,4 +1,3 @@
-// pages/rider/ProfilePage.tsx
 import { useState } from 'react';
 import { 
   Card, 
@@ -29,17 +28,12 @@ import {
 } from '@/components/ui/tabs';
 import { 
   User, 
-  Phone, 
-  Mail, 
-  MapPin, 
   CreditCard, 
   Shield, 
-  Camera, 
   Save, 
   Eye,
   EyeOff,
   Star,
-  AlertTriangle
 } from 'lucide-react';
 
 export default function RiderProfilePage() {
@@ -65,7 +59,7 @@ export default function RiderProfilePage() {
       {/* Profile Header */}
       <div className="flex items-center space-x-4">
         <Avatar className="h-20 w-20">
-          <AvatarImage src={riderData?.profileImage} />
+          <AvatarImage src={riderData?.profileImage ?? undefined} />
           <AvatarFallback className="text-xl">
             {riderData.name.split(' ').map(n => n[0]).join('')}
           </AvatarFallback>

@@ -43,7 +43,6 @@ const FormSchema = z.object({
 export default function Verify() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [email] = useState(location.state);
   const [confirmed, setConfirmed] = useState(false);
   const [sendOtp] = useSendOtpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
@@ -55,6 +54,8 @@ export default function Verify() {
       pin: "",
     },
   });
+
+  const email = location.state as string | undefined;
 
   const handleSendOtp = async () => {
     const toastId = toast.loading("Sending OTP");

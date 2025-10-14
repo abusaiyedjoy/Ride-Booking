@@ -2,6 +2,8 @@ import { baseApi } from "@/redux/baseApi";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+
+    // 🔹 Login
     login: builder.mutation({
       query: (userInfo) => ({
         url: "/auth/login",
@@ -9,6 +11,17 @@ export const authApi = baseApi.injectEndpoints({
         data: userInfo,
       }),
     }),
+
+    // 🔹 Refresh Token
+    refreshToken: builder.mutation({
+      query: (refreshToken) => ({
+        url: "/auth/refresh-token",
+        method: "POST",
+        data: { refreshToken },
+      }),
+    }),
+
+    // 🔹 Logout
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
@@ -16,13 +29,43 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["USER"],
     }),
-    register: builder.mutation({
-      query: (userInfo) => ({
-        url: "/user/register",
+
+    // 🔹 Change Password
+    changePassword: builder.mutation({
+      query: (payload) => ({
+        url: "/auth/change-password",
         method: "POST",
-        data: userInfo,
+        data: payload,
       }),
     }),
+
+    // 🔹 Set Password (e.g. for first login / invited users)
+    setPassword: builder.mutation({
+      query: (payload) => ({
+        url: "/auth/set-password",
+        method: "POST",
+        data: payload,
+      }),
+    }),
+
+    // 🔹 Forgot Password (send reset email)
+    forgotPassword: builder.mutation({
+      query: (payload) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        data: payload,
+      }),
+    }),
+
+    // 🔹 Reset Password (after forgot password flow)
+    resetPassword: builder.mutation({
+      query: (payload) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        data: payload,
+      }),
+    }),
+
     sendOtp: builder.mutation({
       query: (userInfo) => ({
         url: "/otp/send",
@@ -37,14 +80,18 @@ export const authApi = baseApi.injectEndpoints({
         data: userInfo,
       })
     }),
-    userInfo: builder.query({
-      query: () => ({
-        url: "/user/me",
-        method: "GET",
-      }),
-      providesTags: ["USER"],
-    })
+
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useSendOtpMutation, useVerifyOtpMutation, useUserInfoQuery } = authApi;
+export const {
+  useLoginMutation,
+  useRefreshTokenMutation,
+  useLogoutMutation,
+  useChangePasswordMutation,
+  useSetPasswordMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useSendOtpMutation,
+  useVerifyOtpMutation
+} = authApi;

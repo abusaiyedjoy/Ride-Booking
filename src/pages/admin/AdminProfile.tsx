@@ -1,5 +1,4 @@
-// pages/admin/ProfilePage.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -68,7 +67,7 @@ export default function AdminProfilePage() {
       {/* Profile Header */}
       <div className="flex items-center space-x-4">
         <Avatar className="h-20 w-20">
-          <AvatarImage src={adminData.profileImage} />
+          <AvatarImage src={adminData.profileImage ?? undefined} />
           <AvatarFallback className="text-xl bg-red-100 text-red-700">
             {adminData.name.split(' ').map(n => n[0]).join('')}
           </AvatarFallback>

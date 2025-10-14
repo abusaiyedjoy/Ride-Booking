@@ -1,5 +1,4 @@
-// pages/driver/ProfilePage.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -20,7 +19,6 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import { 
   Tabs, 
   TabsContent, 
@@ -29,8 +27,6 @@ import {
 } from '@/components/ui/tabs';
 import { 
   User, 
-  Phone, 
-  Mail, 
   Car, 
   Shield, 
   Camera, 
@@ -71,7 +67,7 @@ export default function DriverProfilePage() {
       {/* Profile Header */}
       <div className="flex items-center space-x-4">
         <Avatar className="h-20 w-20">
-          <AvatarImage src={driverData.profileImage} />
+          <AvatarImage src={driverData?.profileImage ?? undefined} />
           <AvatarFallback className="text-xl">
             {driverData.name.split(' ').map(n => n[0]).join('')}
           </AvatarFallback>

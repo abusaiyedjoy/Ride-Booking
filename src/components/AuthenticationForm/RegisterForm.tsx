@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/Password";
-import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { useRegisterMutation } from "@/redux/features/user/user.api";
 import { toast } from "sonner";
 import {
   Select,
@@ -25,20 +25,50 @@ import {
 } from "@/components/ui/select";
 import config from "@/config";
 
+// RegisterForm.jsx
 const registerSchema = z
   .object({
     name: z
-      .string()
-      .min(3, {
-        error: "Name is too short",
-      })
-      .max(50),
-    email: z.email(),
-    password: z.string().min(8, { error: "Password is too short" }),
+      .string({ invalid_type_error: "Name must be a string" })
+      .min(3, { message: "Name must be at least 3 characters long" })
+      .max(50, { message: "Name must be at most 50 characters long" }),
+    email: z
+      .string({ invalid_type_error: "Email must be a string" })
+      .email({ message: "Invalid email address" })
+      .min(3, { message: "Email must be at least 3 characters long" })
+      .max(50, { message: "Email must be at most 50 characters long" }),
+    password: z
+      .string({ invalid_type_error: "Password must be a string" })
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(50, { message: "Password must be at most 50 characters long" })
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        {
+          message:
+            "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
+        }
+      ),
     confirmPassword: z
+      .string({ invalid_type_error: "Confirm Password must be a string" })
+      .min(8, {
+        message: "Confirm Password must be at least 8 characters long",
+      }),
+    role: z.enum(["RIDER", "DRIVER"], {
+      message: "Role must be either RIDER or DRIVER",
+    }),
+
+    phone: z
       .string()
-      .min(8, { error: "Confirm Password is too short" }),
-    role: z.enum(["RIDER", "DRIVER"], { required_error: "Role is required" }),
+      .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
+        message: "Phone number must be valid for Bangladesh.",
+      })
+      .optional(),
+    address: z
+      .string()
+      .max(100, {
+        message: "Address must be at most 100 characters long",
+      })
+      .optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
@@ -60,6 +90,8 @@ export function RegisterForm({
       password: "",
       confirmPassword: "",
       role: "RIDER",
+      phone: "",
+      address: "",
     },
   });
 
@@ -69,16 +101,17 @@ export function RegisterForm({
       email: data.email,
       password: data.password,
       role: data.role,
+      phone: data.phone || undefined,
+      address: data.address || undefined,
     };
 
     try {
-      const result = await register(userInfo).unwrap();
-      console.log(result);
-      navigate("/verify");
+      await register(userInfo).unwrap();
+      navigate("/verify", {state: data.email});
       toast.success("User created successfully");
     } catch (error) {
+      toast.error(error?.data?.message);
       console.error(error);
-      toast.error( "Failed to create user");
     }
   };
 
@@ -178,6 +211,36 @@ export function RegisterForm({
                         <SelectItem value="DRIVER">Driver</SelectItem>
                       </SelectContent>
                     </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Phone Number */}
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number (Optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="+8801XXXXXXXXX" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Address */}
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address (Optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="123 Main St." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

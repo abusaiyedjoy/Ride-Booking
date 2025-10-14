@@ -2,6 +2,12 @@ import { axiosInstance } from "@/lib/axios";
 import { BaseQueryFn } from "@reduxjs/toolkit/query";
 import { AxiosError, AxiosRequestConfig } from "axios";
 
+type AxiosBaseQueryError = {
+  status?: number;
+  data: unknown;
+  message?: string;
+};
+
 const axiosBaseQuery =
   (): BaseQueryFn<
     {
@@ -12,12 +18,12 @@ const axiosBaseQuery =
       headers?: AxiosRequestConfig["headers"];
     },
     unknown,
-    unknown
+    AxiosBaseQueryError
   > =>
-  async ({ url, method, data, params, headers }) => {
+  async ({ url, method = "GET", data, params, headers }) => {
     try {
       const result = await axiosInstance({
-        url: url,
+        url,
         method,
         data,
         params,
@@ -30,6 +36,7 @@ const axiosBaseQuery =
         error: {
           status: err.response?.status,
           data: err.response?.data || err.message,
+          message: err.message,
         },
       };
     }

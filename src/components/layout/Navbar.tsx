@@ -16,7 +16,6 @@ import { ModeToggle } from "./toggleMode";
 import {
   authApi,
   useLogoutMutation,
-  useUserInfoQuery,
 } from "@/redux/features/auth/auth.api";
 import { useDispatch } from "react-redux";
 import {
@@ -29,6 +28,7 @@ import {
 } from "../ui/dropdown-menu";
 import { CircleUser, Shield, Car, User, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useUserInfoQuery } from "@/redux/features/user/user.api";
 
 // Navigation links based on user roles
 const getNavigationLinks = (role: string | undefined, status: string | undefined) => {
@@ -58,7 +58,7 @@ const getNavigationLinks = (role: string | undefined, status: string | undefined
       { 
         href: "/driver/profile", 
         label: status === "offline" ? "Go Online" : "Ride Requests", 
-        icon: Car,
+        icon: null,
         disabled: status === "offline"
       },
       { href: "/driver/profile", label: "Earnings", icon: null },
@@ -104,7 +104,7 @@ const StatusBadge = ({ status, role }: { status: string; role: string }) => {
 };
 
 export default function Navbar() {
-  const { data } = useUserInfoQuery(undefined);
+  const { data, isLoading } = useUserInfoQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
 
@@ -119,6 +119,9 @@ export default function Navbar() {
     dispatch(authApi.util.resetApiState());
   };
 
+  if(isLoading){
+    return <div>Loading...</div>
+  }
   // Check if user is blocked/suspended and should be redirected
   const isBlocked = userStatus === "blocked" || userStatus === "suspended";
   
