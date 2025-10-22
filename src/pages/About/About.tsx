@@ -7,6 +7,8 @@ import {
   Users,
   Target,
   Sparkles,
+  ArrowRight,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +20,6 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 
 const team = [
   {
@@ -57,249 +58,200 @@ const team = [
 
 const values = [
   {
-    icon: <HeartHandshake className="h-5 w-5" />,
+    icon: <HeartHandshake className="h-6 w-6" />,
     title: "Rider-first",
     desc: "We obsess over safety, comfort, and clarity in every trip.",
+    color: "bg-rose-500/10 text-rose-600",
   },
   {
-    icon: <Leaf className="h-5 w-5" />,
+    icon: <Leaf className="h-6 w-6" />,
     title: "Sustainable",
     desc: "Optimized routes and greener partners to reduce footprint.",
+    color: "bg-emerald-500/10 text-emerald-600",
   },
   {
-    icon: <Sparkles className="h-5 w-5" />,
+    icon: <Sparkles className="h-6 w-6" />,
     title: "Craft",
     desc: "We sweat the details—from UI polish to driver onboarding.",
+    color: "bg-amber-500/10 text-amber-600",
   },
   {
-    icon: <Target className="h-5 w-5" />,
+    icon: <Target className="h-6 w-6" />,
     title: "Focus",
     desc: "Data‑informed bets, clear priorities, consistent delivery.",
+    color: "bg-blue-500/10 text-blue-600",
   },
 ];
 
-const timeline = [
-  {
-    year: "2022",
-    title: "Origins",
-    detail: "Validated demand with a pilot across 3 neighborhoods.",
-  },
-  {
-    year: "2023",
-    title: "Launch",
-    detail: "Released v1 with verified drivers and transparent pricing.",
-  },
-  {
-    year: "2024",
-    title: "Scale",
-    detail: "Expanded to intercity routes and enterprise partners.",
-  },
-  {
-    year: "2025",
-    title: "Today",
-    detail: "Building the most trusted mobility platform in Bangladesh.",
-  },
+const stats = [
+  { icon: <Users className="h-5 w-5" />, value: "100k+", label: "Rides completed" },
+  { icon: <Flag className="h-5 w-5" />, value: "12+", label: "Cities covered" },
+  { icon: <HeartHandshake className="h-5 w-5" />, value: "4.9★", label: "Average rating" },
+  { icon: <TrendingUp className="h-5 w-5" />, value: "500+", label: "Active drivers" },
 ];
 
 export default function About() {
   return (
-    <div className="container mx-auto px-4 py-12 space-y-12">
-      {/* Header */}
-      <div className="flex flex-col items-start gap-4 rounded-2xl bg-gradient-to-br from-muted/40 to-background p-6 md:p-10">
-        <Badge className="w-fit" variant="secondary">
-          <Building2 className="mr-1 h-4 w-4" /> About Us
-        </Badge>
-        <h1 className="text-3xl font-bold tracking-tight md:text-5xl">
-          We move people with care
-        </h1>
-        <p className="max-w-3xl text-muted-foreground md:text-lg">
-          We’re a mobility company on a mission to make city travel simple,
-          safe, and delightfully predictable— for everyone. From daily commutes
-          to intercity journeys, we connect riders and drivers with trust at the
-          core.
-        </p>
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Button size="sm">
-            <Briefcase className="mr-2 h-4 w-4" /> Careers
-          </Button>
-          <Button size="sm" variant="outline">
-            Partner with us
-          </Button>
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 space-y-16">
+        
+        {/* Hero Section */}
+        <div className="relative">
+          <div className="absolute inset-0 " />
+          <div className="flex flex-col items-center text-center gap-6 p-8 md:p-16">
+            <Badge className="w-fit text-sm px-4 py-1.5" variant="secondary">
+              <Building2 className="mr-2 h-4 w-4" /> About Us
+            </Badge>
+            <h1 className="text-4xl font-bold tracking-tight md:text-6xl bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              We move people with care
+            </h1>
+            <p className="max-w-2xl text-muted-foreground text-lg md:text-xl leading-relaxed">
+              A mobility company on a mission to make city travel simple, safe, and delightfully predictable—for everyone.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              <Button size="lg" className="group">
+                <Briefcase className="mr-2 h-5 w-5" /> 
+                Join Our Team
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button size="lg" variant="outline">
+                Partner with us
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Company Background */}
-      <Card className="rounded-2xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <Building2 className="h-6 w-6" /> Company Background
-          </CardTitle>
-          <CardDescription>
-            How we started, what we’ve learned, and where we’re headed.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-6 md:grid-cols-2">
-          <div className="space-y-4 text-sm md:text-base">
-            <p>
-              Founded in 2022, our team began with a simple observation: rides
-              should be reliable, transparent, and respectful of your time. We
-              built a platform that prioritizes clear pricing, verified drivers,
-              and delightful UX.
-            </p>
-            <p>
-              Today, we serve thousands of riders across multiple cities,
-              partnering with local fleets and independent drivers. Our
-              technology balances smart dispatching with human oversight to keep
-              every trip smooth.
-            </p>
-          </div>
-          <div className="grid gap-4">
-            <div className="rounded-xl border p-4">
-              <div className="flex items-center gap-2 font-medium">
-                <Users className="h-4 w-4" /> 100k+ rides completed
-              </div>
-              <p className="text-sm text-muted-foreground">
-                And counting—thanks to our rider community and partners.
-              </p>
-            </div>
-            <div className="rounded-xl border p-4">
-              <div className="flex items-center gap-2 font-medium">
-                <Flag className="h-4 w-4" /> Operating in major cities
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Rolling out thoughtfully, one service area at a time.
-              </p>
-            </div>
-            <div className="rounded-xl border p-4">
-              <div className="flex items-center gap-2 font-medium">
-                <HeartHandshake className="h-4 w-4" /> 4.9★ average rating
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Trust built via safety checks, training, and support.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Mission & Values */}
-      <Card className="rounded-2xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <Target className="h-6 w-6" /> Our Mission
-          </CardTitle>
-          <CardDescription>
-            Make every ride safe, fair, and pleasantly predictable.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="rounded-xl border p-6">
-              <h3 className="mb-2 text-lg font-semibold">What this means</h3>
-              <p className="text-muted-foreground">
-                We invest in great driver tools, transparent pricing, and
-                responsive support—because trust isn’t a feature; it’s the
-                foundation.
-              </p>
-            </div>
-            <div className="rounded-xl border p-6">
-              <h3 className="mb-4 text-lg font-semibold">Our values</h3>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {values.map((v) => (
-                  <div
-                    key={v.title}
-                    className="flex items-start gap-3 rounded-lg border p-3"
-                  >
-                    <div className="mt-0.5">{v.icon}</div>
-                    <div>
-                      <div className="font-medium leading-none">{v.title}</div>
-                      <p className="text-sm text-muted-foreground">{v.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Timeline */}
-      <Card className="rounded-2xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <Building2 className="h-6 w-6" /> Journey
-          </CardTitle>
-          <CardDescription>Milestones that shaped our path.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ol className="relative ml-3 border-l pl-6">
-            {timeline.map((t) => (
-              <li key={t.year} className="mb-8">
-                <div className="absolute -left-3 mt-1 h-6 w-6 rounded-full border bg-background shadow" />
-                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                  {t.year} • {t.title}
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {stats.map((stat, idx) => (
+            <Card key={idx} className="rounded-2xl border-2 hover:border-primary/50 transition-all hover:shadow-lg">
+              <CardContent className="p-6 text-center space-y-2">
+                <div className="inline-flex p-3 rounded-full bg-primary/10 text-primary mb-2">
+                  {stat.icon}
                 </div>
-                <div className="text-base">{t.detail}</div>
-              </li>
-            ))}
-          </ol>
-        </CardContent>
-      </Card>
+                <div className="text-3xl font-bold">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
-      {/* Team */}
-      <Card className="rounded-2xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <Users className="h-6 w-6" /> Meet the Team
-          </CardTitle>
-          <CardDescription>
-            A compact crew with outsized impact.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {team?.map((member) => (
-                <Card className="h-full rounded-2xl text-center">
-                  <CardHeader className="items-center text-center place-content-center">
-                    <Avatar className="h-16 w-16 place-self-center">
-                      <AvatarImage src={member.avatar} alt={member.name} />
-                      <AvatarFallback>{member.initials}</AvatarFallback>
-                    </Avatar>
-                    <CardTitle className="mt-2 text-lg place-self-center">
-                      {member.name}
-                    </CardTitle>
-                    <CardDescription className="flex items-center gap-1 place-self-center">
-                      <Briefcase className="h-4 w-4" /> {member.role}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <p className="text-sm text-muted-foreground text-center">
-                      {member.bio}
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {member.tags.map((t) => (
-                        <Badge
-                          key={t}
-                          variant="secondary"
-                          className="rounded-full"
-                        >
-                          {t}
-                        </Badge>
-                      ))}
-                    </div>
-                    <Separator />
-                    <div className="flex justify-center gap-2">
-                      <Button size="sm" variant="outline">
-                        Connect
-                      </Button>
-                      <Button size="sm">Message</Button>
-                    </div>
-                  </CardContent>
-                </Card>
+        {/* Story Section */}
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+          <Card className="rounded-3xl border-2 h-full">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-3 text-3xl">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Building2 className="h-7 w-7 text-primary" />
+                </div>
+                Our Story
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-muted-foreground leading-relaxed">
+              <p>
+                Founded in 2022, our team began with a simple observation: rides should be reliable, transparent, and respectful of your time. We built a platform that prioritizes clear pricing, verified drivers, and delightful UX.
+              </p>
+              <p>
+                Today, we serve thousands of riders across multiple cities, partnering with local fleets and independent drivers. Our technology balances smart dispatching with human oversight to keep every trip smooth.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-3xl border-2 h-full">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-3 text-3xl">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Target className="h-7 w-7 text-primary" />
+                </div>
+                Our Mission
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <p className="text-muted-foreground leading-relaxed">
+                Make every ride safe, fair, and pleasantly predictable. We invest in great driver tools, transparent pricing, and responsive support—because trust isn't a feature; it's the foundation.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Values Section */}
+        <div className="space-y-8">
+          <div className="text-center space-y-3">
+            <h2 className="text-3xl md:text-4xl font-bold">Our Core Values</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              The principles that guide every decision we make
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((v) => (
+              <Card key={v.title} className="rounded-2xl border-2 hover:border-primary/50 transition-all hover:shadow-lg group">
+                <CardContent className="p-6 space-y-4">
+                  <div className={`inline-flex p-3 rounded-xl ${v.color}`}>
+                    {v.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-xl mb-2">{v.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Team Section */}
+        <div className="space-y-8 mb-14">
+          <div className="text-center space-y-3">
+            <h2 className="text-3xl md:text-4xl font-bold">Meet the Team</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              A compact crew with outsized impact
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {team.map((member) => (
+              <Card key={member.name} className="rounded-2xl border-2 hover:border-primary/50 transition-all hover:shadow-lg group overflow-hidden">
+                <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+                <CardHeader className="items-center text-center pt-8">
+                  <Avatar className="h-20 w-20 border-4 border-background shadow-lg">
+                    <AvatarImage src={member.avatar} alt={member.name} />
+                    <AvatarFallback className="text-lg font-semibold bg-gradient-to-br from-primary/20 to-primary/10">
+                      {member.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <CardTitle className="mt-4 text-xl">
+                    {member.name}
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-2 font-medium">
+                    <Briefcase className="h-4 w-4" /> {member.role}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 pb-6">
+                  <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                    {member.bio}
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {member.tags.map((t) => (
+                      <Badge key={t} variant="secondary" className="rounded-full text-xs">
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    <Button size="sm" variant="outline" className="flex-1">
+                      Connect
+                    </Button>
+                    <Button size="sm" className="flex-1">
+                      Message
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+
+      </div>
     </div>
   );
 }

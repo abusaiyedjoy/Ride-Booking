@@ -45,7 +45,7 @@ export default function SafetyComfort() {
               style={{ backgroundImage: `url(${feature.image})` }}
             />
             {/* Dark Overlay */}
-            <div className="absolute inset-0 bg-black/70" />
+            <div className="absolute inset-0 bg-black/40" />
 
             {/* Content */}
             <div className="relative z-10 flex flex-col justify-center items-center h-full text-center px-6 text-white">

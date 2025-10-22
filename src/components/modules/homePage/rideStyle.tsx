@@ -41,15 +41,15 @@ const rides: Ride[] = [
 ];
 
 const RideCard: React.FC<{ ride: Ride }> = ({ ride }) => (
-  <Card className="rounded-xl overflow-hidden shadow-lg border-2 border-gray-200 dark:border-gray-700">
-    <div className="relative w-full aspect-[16/9] bg-gray-100 dark:bg-gray-800">
+  <Card className="pt-0 rounded-xl overflow-hidden shadow-lg border-2 border-gray-200 dark:border-gray-700">
+    <div className="bg-gray-100 dark:bg-gray-800">
       <img
         src={ride.image}
         alt={ride.title}
-        className="absolute inset-0 w-full h-full object-cover rounded-t-xl"
+        className="w-full h-full object-cover rounded-t-xl"
       />
     </div>
-    <CardHeader className="pt-4 px-6 text-start">
+    <CardHeader className="pt-2 px-6 text-start">
       <CardTitle className="text-lg font-bold text-secondary-foreground uppercase tracking-wider">
         {ride.title}
       </CardTitle>
@@ -72,7 +72,7 @@ const RideCard: React.FC<{ ride: Ride }> = ({ ride }) => (
 
 const RideStyleSection: React.FC = () => {
   return (
-    <section className="py-14 bg-background">
+    <section className="py-14">
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12">
           Choose Your Ride Style

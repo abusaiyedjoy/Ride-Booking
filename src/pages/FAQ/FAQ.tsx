@@ -85,7 +85,7 @@ const FAQ = ({
   );
 
   return (
-    <section className="py-24 lg:py-32">
+    <section className="py-24 lg:py-32 bg-white/90 dark:bg-transparent">
       <div className="container space-y-16">
         {/* Heading */}
         <div className="mx-auto flex max-w-3xl flex-col text-left md:text-center">
@@ -102,7 +102,7 @@ const FAQ = ({
             placeholder="Search questions..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="mb-8"
+            className="mb-8 border border-gray-400"
           />
         </div>
 

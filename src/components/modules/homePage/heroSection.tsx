@@ -17,7 +17,7 @@ export const HeroSection = () => {
   }
 
   return (
-    <section className="relative overflow-hidden lg:h-[90vh] my-12 rounded-3xl flex items-center">
+    <section className="relative overflow-hidden lg:h-[90vh] mb-12 rounded-3xl flex items-center">
       {/* Background image */}
       <div className="absolute inset-0">
         <img
@@ -65,7 +65,7 @@ export const HeroSection = () => {
           </div>
 
           {/* Booking Form */}
-          <div className="w-full max-w-7xl mx-auto p-6 bg-background/90 backdrop-blur-sm rounded-2xl shadow-lg">
+          <div className="w-full max-w-7xl mx-auto p-6 bg-background/80 backdrop-blur-sm rounded-2xl shadow-lg">
             <div className="flex flex-col gap-4">
               <div className={`w-full ${roundTrip ? "space-y-4" : "flex flex-col md:flex-row justify-between items-center w-full gap-4"}`}>
                 {/* Row 1: Departure & Round Trip & Return Location */}
