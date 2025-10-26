@@ -17,7 +17,7 @@ export const HeroSection = () => {
   }
 
   return (
-    <section className="relative overflow-hidden lg:h-[90vh] mb-12 rounded-3xl flex items-center">
+    <section className="2xl:container 2xl:mx-auto relative overflow-hidden lg:h-[90vh] mb-12 flex items-center">
       {/* Background image */}
       <div className="absolute inset-0">
         <img

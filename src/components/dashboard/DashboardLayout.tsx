@@ -24,7 +24,6 @@ import {
   Users,
   BarChart3,
   Bell,
-  CreditCard,
   Star,
   Route,
   UserCheck,
@@ -65,41 +64,23 @@ export default function DashboardLayout({
       case "RIDER":
         return [
           {
-            title: "Dashboard",
-            icon: LayoutDashboard,
-            href: "/rider/dashboard",
-            description: "Overview",
+            title: "Profile",
+            icon: User,
+            href: "/rider/profile",
+            description: "Account settings",
           },
           {
             title: "Book Ride",
             icon: MapPin,
-            href: "/rider/book-ride",
+            href: "/rider/ride-book",
             description: "Request new ride",
-          },
-          {
-            title: "Active Rides",
-            icon: Route,
-            href: "/rider/active-rides",
-            description: "Current trips",
           },
           {
             title: "Ride History",
             icon: History,
             href: "/rider/history",
             description: "Past rides",
-          },
-          {
-            title: "Payments",
-            icon: CreditCard,
-            href: "/rider/payments",
-            description: "Payment methods",
-          },
-          {
-            title: "Profile",
-            icon: User,
-            href: "/rider/profile",
-            description: "Account settings",
-          },
+          }
         ];
 
       case "DRIVER":
@@ -432,7 +413,7 @@ export default function DashboardLayout({
                   <Button
                     
                     onClick={handleLogout}
-                    className="w-full justify-start cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
+                    className="w-full justify-start cursor-pointer text-red-600 hover:text-red-700 bg-red-50 dark:bg-gray-700 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
                   >
                     <LogOut className="w-4 h-4" />
                     Logout

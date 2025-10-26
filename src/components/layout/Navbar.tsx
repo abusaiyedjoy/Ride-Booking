@@ -107,7 +107,7 @@ export default function Navbar() {
   const { data, isLoading } = useUserInfoQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
-
+console.log("role", data?.data?.role)
   const userRole = data?.data?.role;
   const userStatus = data?.data?.status || data?.data?.availability; 
   const userName = data?.data?.name || data?.user?.name;

@@ -78,6 +78,14 @@ export const router = createBrowserRouter([
         path: "profile",
         Component: RiderProfilePage,
       },
+      {
+        path: "ride-book",
+        Component: RideRequestForm,
+      },
+      {
+        path: "history",
+        Component: RiderProfilePage,
+      },
       
     ],
   },

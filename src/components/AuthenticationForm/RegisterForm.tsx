@@ -29,34 +29,31 @@ import config from "@/config";
 const registerSchema = z
   .object({
     name: z
-      .string({ invalid_type_error: "Name must be a string" })
+      .string("Name is required")
       .min(3, { message: "Name must be at least 3 characters long" })
       .max(50, { message: "Name must be at most 50 characters long" }),
     email: z
-      .string({ invalid_type_error: "Email must be a string" })
+      .string("Email is required")
       .email({ message: "Invalid email address" })
       .min(3, { message: "Email must be at least 3 characters long" })
       .max(50, { message: "Email must be at most 50 characters long" }),
     password: z
-      .string({ invalid_type_error: "Password must be a string" })
+      .string("Password is required")
       .min(8, { message: "Password must be at least 8 characters long" })
       .max(50, { message: "Password must be at most 50 characters long" })
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         {
           message:
-            "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
+            "Password must contain at least one lowercase, one uppercase, one digit, and one special character",
         }
       ),
-    confirmPassword: z
-      .string({ invalid_type_error: "Confirm Password must be a string" })
-      .min(8, {
-        message: "Confirm Password must be at least 8 characters long",
-      }),
+    confirmPassword: z.string("Confirm Password is required").min(8, {
+      message: "Confirm Password must be at least 8 characters long",
+    }),
     role: z.enum(["RIDER", "DRIVER"], {
       message: "Role must be either RIDER or DRIVER",
     }),
-
     phone: z
       .string()
       .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
@@ -71,7 +68,7 @@ const registerSchema = z
       .optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
+    message: "Passwords do not match",
     path: ["confirmPassword"],
   });
 
@@ -107,10 +104,10 @@ export function RegisterForm({
 
     try {
       await register(userInfo).unwrap();
-      navigate("/verify", {state: data.email});
+      navigate("/verify", { state: data.email });
       toast.success("User created successfully");
     } catch (error) {
-      toast.error(error?.data?.message);
+      toast.error((error as any)?.data?.message);
       console.error(error);
     }
   };
