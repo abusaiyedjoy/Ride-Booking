@@ -11,7 +11,13 @@ export const authApi = baseApi.injectEndpoints({
         data: userInfo,
       }),
     }),
-
+    myDetails: builder.query({
+      query: () => ({
+        url: "/user/me",
+        method: "GET",
+      }),
+      providesTags: ["USER"],
+    }),
     // 🔹 Refresh Token
     refreshToken: builder.mutation({
       query: (refreshToken) => ({
@@ -93,5 +99,6 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useSendOtpMutation,
-  useVerifyOtpMutation
+  useVerifyOtpMutation,
+  useMyDetailsQuery
 } = authApi;

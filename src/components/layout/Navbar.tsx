@@ -13,10 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { Link } from "react-router";
 import { ModeToggle } from "./toggleMode";
-import {
-  authApi,
-  useLogoutMutation,
-} from "@/redux/features/auth/auth.api";
+import { authApi, useLogoutMutation } from "@/redux/features/auth/auth.api";
 import { useDispatch } from "react-redux";
 import {
   DropdownMenu,
@@ -31,8 +28,10 @@ import { Badge } from "@/components/ui/badge";
 import { useUserInfoQuery } from "@/redux/features/user/user.api";
 
 // Navigation links based on user roles
-const getNavigationLinks = (role: string | undefined, status: string | undefined) => {
-  // Public navigation for non-authenticated users
+const getNavigationLinks = (
+  role: string | undefined,
+  status: string | undefined
+) => {
   const publicLinks = [
     { href: "/", label: "Home", role: "PUBLIC" },
     { href: "/about", label: "About Us", role: "PUBLIC" },
@@ -41,37 +40,29 @@ const getNavigationLinks = (role: string | undefined, status: string | undefined
     { href: "/faq", label: "FAQ", role: "PUBLIC" },
   ];
 
-  // Return public links if no role
   if (!role) return publicLinks;
 
-  // Role-based navigation links
   const roleBasedLinks: Record<string, any[]> = {
     RIDER: [
       { href: "/rider/profile", label: "Dashboard", icon: null },
-      { href: "/rides", label: "Book Ride", icon: null },
-      { href: "/rider/profile", label: "My Rides", icon: null },
-      { href: "/rider/profile", label: "Profile", icon: null },
-      { href: "/contact", label: "Support", icon: null },
+      { href: "/about", label: "About Us", role: "PUBLIC" },
+      { href: "/features", label: "Features", role: "PUBLIC" },
+      { href: "/contact", label: "Contact", role: "PUBLIC" },
+      { href: "/faq", label: "FAQ", role: "PUBLIC" },
     ],
     DRIVER: [
       { href: "/driver/profile", label: "Dashboard", icon: null },
-      { 
-        href: "/driver/profile", 
-        label: status === "offline" ? "Go Online" : "Ride Requests", 
-        icon: null,
-        disabled: status === "offline"
-      },
-      { href: "/driver/profile", label: "Earnings", icon: null },
-      { href: "/driver/profile", label: "Ride History", icon: null },
-      { href: "/driver/profile", label: "Profile", icon: null },
+      { href: "/about", label: "About Us", role: "PUBLIC" },
+      { href: "/features", label: "Features", role: "PUBLIC" },
+      { href: "/contact", label: "Contact", role: "PUBLIC" },
+      { href: "/faq", label: "FAQ", role: "PUBLIC" },
     ],
     SUPER_ADMIN: [
       { href: "/admin/profile", label: "Dashboard", icon: null },
-      { href: "/admin/profile", label: "User Management", icon: null },
-      { href: "/admin/profile", label: "Ride Management", icon: null },
-      { href: "/admin/profile", label: "Analytics", icon: null },
-      { href: "/admin/profile", label: "Reports", icon: null },
-      { href: "/admin/profile", label: "Profile", icon: null },
+      { href: "/about", label: "About Us", role: "PUBLIC" },
+      { href: "/features", label: "Features", role: "PUBLIC" },
+      { href: "/contact", label: "Contact", role: "PUBLIC" },
+      { href: "/faq", label: "FAQ", role: "PUBLIC" },
     ],
   };
 
@@ -82,7 +73,7 @@ const getNavigationLinks = (role: string | undefined, status: string | undefined
 const StatusBadge = ({ status, role }: { status: string; role: string }) => {
   if (role === "DRIVER") {
     return (
-      <Badge 
+      <Badge
         variant={status === "online" ? "default" : "secondary"}
         className="ml-2 text-xs"
       >
@@ -90,7 +81,7 @@ const StatusBadge = ({ status, role }: { status: string; role: string }) => {
       </Badge>
     );
   }
-  
+
   if (status === "blocked" || status === "suspended") {
     return (
       <Badge variant="destructive" className="ml-2 text-xs">
@@ -99,7 +90,7 @@ const StatusBadge = ({ status, role }: { status: string; role: string }) => {
       </Badge>
     );
   }
-  
+
   return null;
 };
 
@@ -107,11 +98,12 @@ export default function Navbar() {
   const { data, isLoading } = useUserInfoQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
-console.log("role", data?.data?.role)
+  console.log("role", data);
+  console.log("role", data?.data?.role);
   const userRole = data?.data?.role;
-  const userStatus = data?.data?.status || data?.data?.availability; 
+  const userStatus = data?.data?.status || data?.data?.availability;
   const userName = data?.data?.name || data?.user?.name;
-  
+
   const navigationLinks = getNavigationLinks(userRole, userStatus);
 
   const handleLogout = async () => {
@@ -119,19 +111,23 @@ console.log("role", data?.data?.role)
     dispatch(authApi.util.resetApiState());
   };
 
-  if(isLoading){
-    return <div>Loading...</div>
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
   // Check if user is blocked/suspended and should be redirected
   const isBlocked = userStatus === "blocked" || userStatus === "suspended";
-  
+
   // Get dashboard link based on role
   const getDashboardLink = (role: string) => {
-    switch(role) {
-      case "RIDER": return "/rider/profile";
-      case "DRIVER": return "/driver/profile";
-      case "SUPER_ADMIN": return "/admin/profile";
-      default: return "/";
+    switch (role) {
+      case "RIDER":
+        return "/rider/profile";
+      case "DRIVER":
+        return "/driver/profile";
+      case "SUPER_ADMIN":
+        return "/admin/profile";
+      default:
+        return "/";
     }
   };
 
@@ -180,10 +176,12 @@ console.log("role", data?.data?.role)
                 <NavigationMenuList className="flex-col items-start gap-1">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink 
-                        asChild 
+                      <NavigationMenuLink
+                        asChild
                         className={`py-2 px-3 rounded-md transition-colors flex items-center gap-2 ${
-                          link.disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-accent'
+                          link.disabled
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:bg-accent"
                         }`}
                       >
                         {link.disabled ? (
@@ -192,7 +190,10 @@ console.log("role", data?.data?.role)
                             {link.label}
                           </div>
                         ) : (
-                          <Link to={link.href} className="flex items-center gap-2">
+                          <Link
+                            to={link.href}
+                            className="flex items-center gap-2"
+                          >
                             {link.icon && <link.icon className="w-4 h-4" />}
                             {link.label}
                           </Link>
@@ -206,8 +207,8 @@ console.log("role", data?.data?.role)
           </Popover>
 
           {/* Logo */}
-          <Link 
-            to={userRole ? getDashboardLink(userRole) : "/"} 
+          <Link
+            to={userRole ? getDashboardLink(userRole) : "/"}
             className="flex items-center hover:opacity-80 transition-opacity"
           >
             <Logo />
@@ -229,7 +230,10 @@ console.log("role", data?.data?.role)
                     asChild
                     className="text-muted-foreground hover:text-primary py-1.5 font-medium transition-colors flex items-center gap-2"
                   >
-                    <Link to={link.href} className="inline-flex items-center gap-2">
+                    <Link
+                      to={link.href}
+                      className="inline-flex items-center gap-2"
+                    >
                       {link.icon && <link.icon className="w-4 h-4" />}
                       {link.label}
                     </Link>
@@ -245,106 +249,86 @@ console.log("role", data?.data?.role)
           <ModeToggle />
 
           {data?.data?.email ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="rounded-full p-0 w-10 h-10 flex items-center justify-center relative"
-                >
-                  {data?.data?.picture ? (
-                    <img
-                      src={data.data.picture}
-                      alt="Profile"
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-secondary cursor-pointer flex items-center justify-center">
-                      {userRole === "SUPER_ADMIN" ? (
-                        <Shield className="w-5 h-5 text-foreground" />
-                      ) : userRole === "DRIVER" ? (
-                        <Car className="w-5 h-5 text-foreground" />
-                      ) : (
-                        <CircleUser className="w-5 h-5 text-foreground" />
-                      )}
-                    </div>
-                  )}
-                  
-                  {/* Status indicator for drivers */}
-                  {userRole === "DRIVER" && (
-                    <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background ${
-                      userStatus === "online" ? "bg-green-500" : "bg-gray-400"
-                    }`} />
-                  )}
-                  
-                  {/* Alert indicator for blocked/suspended users */}
-                  {isBlocked && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                      <AlertCircle className="w-3 h-3 text-white" />
-                    </div>
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="flex flex-col">
-                  <span>{userName || "My Account"}</span>
-                  <span className="text-xs text-muted-foreground font-normal flex items-center">
-                    {userRole?.toLowerCase()} account
-                    <StatusBadge status={userStatus} role={userRole} />
-                  </span>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                {/* Role-specific menu items */}
-                {!isBlocked && (
-                  <>
-                    <DropdownMenuItem asChild>
-                      <Link className="flex items-center gap-2" to={getDashboardLink(userRole)}>
-                        <User className="w-4 h-4 mr-2" />
-                        Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link className="flex items-center gap-2" to={`/${userRole.toLowerCase()}/profile`}>
-                        <CircleUser className="w-4 h-4 mr-2" />
-                        Profile Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="rounded-full p-0 w-10 h-10 flex items-center justify-center relative"
+                  >
+                    {data?.data?.picture ? (
+                      <img
+                        src={data.data.picture}
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-secondary cursor-pointer flex items-center justify-center">
+                        {userRole === "SUPER_ADMIN" ? (
+                          <Shield className="w-5 h-5 text-foreground" />
+                        ) : userRole === "DRIVER" ? (
+                          <Car className="w-5 h-5 text-foreground" />
+                        ) : (
+                          <CircleUser className="w-5 h-5 text-foreground" />
+                        )}
+                      </div>
+                    )}
+
+                    {/* Status indicator for drivers */}
                     {userRole === "DRIVER" && (
+                      <div
+                        className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background ${
+                          userStatus === "online"
+                            ? "bg-green-500"
+                            : "bg-gray-400"
+                        }`}
+                      />
+                    )}
+
+                    {/* Alert indicator for blocked/suspended users */}
+                    {isBlocked && (
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                        <AlertCircle className="w-3 h-3 text-white" />
+                      </div>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="flex flex-col">
+                    <span>{userName || "My Account"}</span>
+                    <span className="text-xs text-muted-foreground font-normal flex items-center">
+                      {userRole?.toLowerCase()} account
+                      <StatusBadge status={userStatus} role={userRole} />
+                    </span>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+
+                  {/* Role-specific menu items */}
+                  {!isBlocked && (
+                    <>
                       <DropdownMenuItem asChild>
-                        <Link className="flex items-center gap-2" to="/driver/profile">
-                          <Car className="w-4 h-4 mr-2" />
-                          Earnings
+                        <Link
+                          className="flex items-center gap-2"
+                          to={getDashboardLink(userRole)}
+                        >
+                          <User className="w-4 h-4 mr-2" />
+                          Dashboard
                         </Link>
                       </DropdownMenuItem>
-                    )}
-                    
-                    {userRole === "RIDER" && (
-                      <DropdownMenuItem asChild>
-                        <Link className="flex items-center gap-2" to="/rider/profile">
-                          <Car className="w-4 h-4 mr-2" />
-                          My Rides
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                  </>
-                )}
-                
-                <DropdownMenuSeparator />
-                
-                {/* Support/Help */}
-                <DropdownMenuItem asChild>
-                  <Link to="/contact">
-                    Help & Support
-                  </Link>
-                </DropdownMenuItem>
-                
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    </>
+                  )}
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="text-red-600 focus:text-red-600"
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+             
+            </>
           ) : (
             <div className="flex items-center gap-2">
               <Button asChild variant="ghost" size="sm">

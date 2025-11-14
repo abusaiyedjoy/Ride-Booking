@@ -26,7 +26,6 @@ import {
   Bell,
   Star,
   Route,
-  UserCheck,
   Activity,
   TrendingUp,
 } from "lucide-react";
@@ -88,19 +87,19 @@ export default function DashboardLayout({
           {
             title: "Dashboard",
             icon: LayoutDashboard,
-            href: "/driver/dashboard",
+            href: "/driver/profile",
             description: "Overview",
           },
           {
             title: "Ride Requests",
             icon: Bell,
-            href: "/driver/requests",
+            href: "/driver/profile",
             description: "Incoming requests",
           },
           {
             title: "Active Rides",
             icon: Route,
-            href: "/driver/active-rides",
+            href: "/driver/profile",
             description: "Current trips",
           },
           {
@@ -118,7 +117,7 @@ export default function DashboardLayout({
           {
             title: "Vehicle",
             icon: Car,
-            href: "/driver/vehicle",
+            href: "/driver/profile",
             description: "Vehicle management",
           },
           {
@@ -134,43 +133,31 @@ export default function DashboardLayout({
           {
             title: "Dashboard",
             icon: LayoutDashboard,
-            href: "/super-admin/dashboard",
+            href: "/admin/profile",
             description: "System overview",
           },
           {
             title: "User Management",
             icon: Users,
-            href: "/super-admin/users",
+            href: "/admin/users",
             description: "Manage riders",
-          },
-          {
-            title: "Driver Management",
-            icon: UserCheck,
-            href: "/super-admin/drivers",
-            description: "Approve drivers",
           },
           {
             title: "Ride Oversight",
             icon: Route,
-            href: "/super-admin/rides",
+            href: "/admin/rides",
             description: "All ride records",
           },
           {
             title: "Analytics",
             icon: BarChart3,
-            href: "/super-admin/analytics",
+            href: "/admin/analytics",
             description: "Reports & insights",
-          },
-          {
-            title: "System Settings",
-            icon: Settings,
-            href: "/super-admin/settings",
-            description: "Configuration",
           },
           {
             title: "Profile",
             icon: User,
-            href: "/super-admin/profile",
+            href: "/admin/profile",
             description: "Admin settings",
           },
         ];

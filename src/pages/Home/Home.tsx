@@ -1,3 +1,4 @@
+import EmergencySOS from "@/components/layout/EmergencySOS";
 import { HeroSection } from "@/components/modules/homePage/heroSection";
 import HowItWorksSection from "@/components/modules/homePage/howItWorks";
 import RideStyleSection from "@/components/modules/homePage/rideStyle";
@@ -5,9 +6,16 @@ import SafetyComfort from "@/components/modules/homePage/safety&Comfort";
 import TestimonialSection from "@/components/modules/homePage/Testimonial";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useUserInfoQuery } from "@/redux/features/user/user.api";
 import { ArrowRight } from "lucide-react";
 
 const Home = () => {
+  const { data, isLoading } = useUserInfoQuery(undefined);
+  const userRole = data?.data?.role;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="">
       <HeroSection />
@@ -35,6 +43,13 @@ const Home = () => {
           </div>
         </CardContent>
       </Card>
+      {userRole === "RIDER" || userRole === "DRIVER" ? (
+        <div className="fixed bottom-20 z-50 right-5">
+          <EmergencySOS />
+        </div>
+      ) : (
+        <div className=""></div>
+      )}
     </div>
   );
 };

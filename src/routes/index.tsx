@@ -15,6 +15,11 @@ import RiderProfilePage from "@/pages/rider/Profile";
 import Verify from "@/pages/Verify/Verify";
 import { createBrowserRouter } from "react-router";
 import RideRequestForm from './../pages/rideBook/RideBookinForm';
+import RideHistoryPage from "@/pages/driver/Ride-History";
+import AdminUserManagement from "@/pages/admin/User-Management";
+import AdminRideOversight from "@/pages/admin/Ride-Oversight";
+import AdminAnalyticsDashboard from "@/pages/admin/Analytics-Dashboard";
+import DriverEarningsDashboard from "@/pages/driver/Earnings-Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -84,7 +89,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "history",
-        Component: RiderProfilePage,
+        Component: RideHistoryPage,
       },
       
     ],
@@ -99,6 +104,14 @@ export const router = createBrowserRouter([
         path: "profile",
         Component: DriverProfilePage,
       },
+      {
+        path: "history",
+        Component: RideHistoryPage,
+      },
+      {
+        path: "earnings",
+        Component: DriverEarningsDashboard,
+      },
     ],
   },
 
@@ -110,6 +123,18 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         Component: AdminProfilePage,
+      },
+      {
+        path: "users",
+        Component: AdminUserManagement,
+      },
+      {
+        path: "rides",
+        Component: AdminRideOversight,
+      },
+      {
+        path: "analytics",
+        Component: AdminAnalyticsDashboard,
       },
     ],
   },
